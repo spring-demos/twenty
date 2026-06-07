@@ -1,0 +1,34 @@
+spring: "1.0"
+
+name: Project Setup
+description: Auto-generated setup recipe using yarn
+
+prerequisites:
+  - name: Node.js
+    check: node --version
+    required: true
+  - name: yarn
+    check: yarn --version
+    required: true
+  - name: Docker
+    check: docker --version
+    required: true
+
+steps:
+  - name: Install dependencies
+    run: yarn install
+  - name: Setup development environment
+    run: bash packages/twenty-utils/setup-dev-env.sh --docker
+  - name: Build shared package
+    run: npx nx build twenty-shared
+  - name: Initialize database (if needed)
+    run: "if ! psql -U twenty -d default -c \"SELECT 1 FROM metadata.\\\"workspaceSchema\\\" LIMIT 1\" > /dev/null 2>&1; then\n  npx nx database:reset twenty-server\nelse\n  echo \"Database already initialized, skipping reset\"\nfi\n"
+  - name: Start development server
+    run: yarn run start
+    background: true
+    ready_when:
+      type: http
+      url: "http://localhost:3001"
+      status: 200
+      timeout: "120s"
+    success_url: "http://localhost:3001"
