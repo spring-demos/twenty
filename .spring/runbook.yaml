@@ -18,7 +18,7 @@ prerequisites:
 
 steps:
   - name: Force Node.js version
-    run: "fnm install 24.5.0 && fnm use 24.5.0"
+    run: "export PATH=\"$HOME/.local/share/fnm:$PATH\" && eval \"$(fnm env)\" && fnm install 24.5.0 && fnm use 24.5.0 && node --version"
   - name: Install dependencies
     run: yarn install
   - name: Setup development environment
