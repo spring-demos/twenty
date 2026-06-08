@@ -7,6 +7,8 @@ prerequisites:
   - name: Node.js
     check: node --version
     required: true
+    version_check: "v24.5.0"
+    install: "curl -fsSL https://fnm.vercel.app/install | bash && export PATH=\"$HOME/.local/share/fnm:$PATH\" && eval \"$(fnm env)\" && fnm install 24.5.0 && fnm use 24.5.0"
   - name: yarn
     check: yarn --version
     required: true
@@ -15,6 +17,8 @@ prerequisites:
     required: true
 
 steps:
+  - name: Force Node.js version
+    run: "fnm install 24.5.0 && fnm use 24.5.0"
   - name: Install dependencies
     run: yarn install
   - name: Setup development environment
